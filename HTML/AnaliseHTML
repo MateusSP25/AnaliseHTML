@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard de Dados | Mateus Santos Peixoto</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>📊 Dashboard de Análise de Dados</h1>
+
+        <p>
+            Projeto desenvolvido para apresentação de indicadores
+            utilizando HTML.
+        </p>
+    </header>
+
+    <hr>
+
+    <main>
+
+        <section>
+
+            <h2>📈 Indicadores Gerais</h2>
+
+            <div>
+
+                <h3>Total de Observações</h3>
+                <p>1.250</p>
+
+            </div>
+
+            <div>
+
+                <h3>Média</h3>
+                <p>78,5</p>
+
+            </div>
+
+            <div>
+
+                <h3>Mediana</h3>
+                <p>76,0</p>
+
+            </div>
+
+            <div>
+
+                <h3>Desvio-Padrão</h3>
+                <p>12,4</p>
+
+            </div>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>🗺️ Indicadores por Região</h2>
+
+            <table border="1">
+
+                <thead>
+
+                    <tr>
+                        <th>Região</th>
+                        <th>Observações</th>
+                        <th>Média</th>
+                        <th>Índice</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Nordeste</td>
+                        <td>350</td>
+                        <td>82,3</td>
+                        <td>0,81</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sudeste</td>
+                        <td>420</td>
+                        <td>85,7</td>
+                        <td>0,87</td>
+                    </tr>
+
+                    <tr>
+                        <td>Sul</td>
+                        <td>210</td>
+                        <td>83,1</td>
+                        <td>0,84</td>
+                    </tr>
+
+                    <tr>
+                        <td>Centro-Oeste</td>
+                        <td>170</td>
+                        <td>79,6</td>
+                        <td>0,76</td>
+                    </tr>
+
+                    <tr>
+                        <td>Norte</td>
+                        <td>100</td>
+                        <td>72,8</td>
+                        <td>0,69</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+        <hr>
+
+        <section>
+
+            <h2>🔎 Sobre o Projeto</h2>
+
+            <p>
+                Este projeto apresenta uma estrutura inicial de dashboard
+                utilizando HTML para organização e apresentação de informações.
+            </p>
+
+            <p>
+                O objetivo é integrar conhecimentos de desenvolvimento web
+                com Estatística, Análise de Dados e Ciência de Dados.
+            </p>
+
+            <a href="dashboard.html">
+                📊 Acessar Dashboard Detalhado
+            </a>
+
+        </section>
+
+    </main>
+
+    <hr>
+
+    <footer>
+
+        <p>
+            Desenvolvido por Mateus Santos Peixoto
+        </p>
+
+        <p>
+            Estatística • Ciência de Dados • R • Python • SQL • Power BI
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

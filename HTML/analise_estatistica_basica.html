@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise Estatística Básica</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0}
+header,footer{text-align:center;padding:24px;background:#111827}
+main{width:min(1000px,92%);margin:24px auto}
+.card{background:#1e293b;padding:20px;border-radius:12px;margin-bottom:20px}
+textarea{width:100%;min-height:100px;background:#0f172a;color:#fff;border:1px solid #475569;border-radius:8px;padding:10px}
+button{margin-top:10px;padding:10px 16px;border:0;border-radius:8px;background:#38bdf8;font-weight:bold;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.stat{background:#0f172a;padding:14px;border-radius:8px}
+.stat b{display:block;color:#38bdf8;margin-bottom:6px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #475569;padding:8px;text-align:center}
+canvas{width:100%;background:#0f172a;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+<h1>📊 Análise Estatística Básica</h1>
+<p>HTML + JavaScript para estatística descritiva.</p>
+</header>
+
+<main>
+<section class="card">
+<h2>Dados</h2>
+<p>Digite valores separados por vírgula, espaço ou quebra de linha.</p>
+<textarea id="dados">12, 15, 18, 20, 22, 22, 24, 25, 28, 30</textarea>
+<button onclick="analisar()">Analisar</button>
+<button onclick="gerarAleatorios()">Gerar números aleatórios</button>
+</section>
+
+<section class="card">
+<h2>Estatísticas descritivas</h2>
+<div class="grid">
+<div class="stat"><b>N</b><span id="n"></span></div>
+<div class="stat"><b>Média</b><span id="media"></span></div>
+<div class="stat"><b>Mediana</b><span id="mediana"></span></div>
+<div class="stat"><b>Moda</b><span id="moda"></span></div>
+<div class="stat"><b>Mínimo</b><span id="min"></span></div>
+<div class="stat"><b>Máximo</b><span id="max"></span></div>
+<div class="stat"><b>Amplitude</b><span id="amp"></span></div>
+<div class="stat"><b>Variância amostral</b><span id="var"></span></div>
+<div class="stat"><b>Desvio-padrão</b><span id="dp"></span></div>
+<div class="stat"><b>Coef. de variação</b><span id="cv"></span></div>
+<div class="stat"><b>Q1</b><span id="q1"></span></div>
+<div class="stat"><b>Q3</b><span id="q3"></span></div>
+</div>
+</section>
+
+<section class="card">
+<h2>Dados ordenados</h2>
+<table>
+<thead><tr><th>Posição</th><th>Valor</th></tr></thead>
+<tbody id="tabela"></tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>Gráfico de frequências</h2>
+<canvas id="grafico" width="900" height="380"></canvas>
+</section>
+
+<section class="card">
+<h2>Interpretação</h2>
+<p id="interpretacao"></p>
+</section>
+</main>
+
+<footer>Projeto de Estatística Descritiva • HTML • JavaScript</footer>
+
+<script>
+function media(v){return v.reduce((a,b)=>a+b,0)/v.length}
+function mediana(v){let x=[...v].sort((a,b)=>a-b),m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2}
+function quartil(v,p){let x=[...v].sort((a,b)=>a-b),pos=(x.length-1)*p,b=Math.floor(pos),r=pos-b;return x[b+1]!==undefined?x[b]+r*(x[b+1]-x[b]):x[b]}
+function moda(v){let f={};v.forEach(x=>f[x]=(f[x]||0)+1);let m=Math.max(...Object.values(f));if(m===1)return "Amodal";return Object.keys(f).filter(x=>f[x]===m).join(", ")}
+function variancia(v){let m=media(v);return v.reduce((s,x)=>s+(x-m)**2,0)/(v.length-1)}
+
+function grafico(dados){
+ const c=document.getElementById("grafico"),ctx=c.getContext("2d");
+ ctx.clearRect(0,0,c.width,c.height);
+ let f={};dados.forEach(x=>f[x]=(f[x]||0)+1);
+ let vals=Object.keys(f).map(Number).sort((a,b)=>a-b),freq=vals.map(x=>f[x]),maxF=Math.max(...freq);
+ let margem=50,esp=(c.width-2*margem)/vals.length,bar=esp*0.65;
+ ctx.font="15px Arial";
+ vals.forEach((v,i)=>{
+   let h=(freq[i]/maxF)*(c.height-120),x=margem+i*esp+(esp-bar)/2,y=c.height-margem-h;
+   ctx.fillStyle="#38bdf8";ctx.fillRect(x,y,bar,h);
+   ctx.fillStyle="#e2e8f0";ctx.fillText(v.toString(),x,c.height-margem+20);ctx.fillText(freq[i].toString(),x,y-8);
+ });
+}
+
+
+function gerarAleatorios(){
+  const quantidade = 20;
+  const minimo = 1;
+  const maximo = 100;
+
+  const numeros = Array.from(
+    {length: quantidade},
+    () => Math.floor(Math.random() * (maximo - minimo + 1)) + minimo
+  );
+
+  document.getElementById("dados").value = numeros.join(", ");
+  analisar();
+}
+
+function analisar(){
+ let dados=document.getElementById("dados").value.split(/[\s,;]+/).map(Number).filter(Number.isFinite);
+ if(dados.length<2){alert("Informe pelo menos dois valores numéricos.");return}
+ let ord=[...dados].sort((a,b)=>a-b),m=media(dados),med=mediana(dados),va=variancia(dados),dp=Math.sqrt(va),cv=m!==0?Math.abs(dp/m)*100:NaN;
+ document.getElementById("n").textContent=dados.length;
+ document.getElementById("media").textContent=m.toFixed(2);
+ document.getElementById("mediana").textContent=med.toFixed(2);
+ document.getElementById("moda").textContent=moda(dados);
+ document.getElementById("min").textContent=Math.min(...dados).toFixed(2);
+ document.getElementById("max").textContent=Math.max(...dados).toFixed(2);
+ document.getElementById("amp").textContent=(Math.max(...dados)-Math.min(...dados)).toFixed(2);
+ document.getElementById("var").textContent=va.toFixed(2);
+ document.getElementById("dp").textContent=dp.toFixed(2);
+ document.getElementById("cv").textContent=Number.isFinite(cv)?cv.toFixed(2)+"%":"Indefinido";
+ document.getElementById("q1").textContent=quartil(dados,.25).toFixed(2);
+ document.getElementById("q3").textContent=quartil(dados,.75).toFixed(2);
+
+ let tabela=document.getElementById("tabela");tabela.innerHTML="";
+ ord.forEach((x,i)=>tabela.innerHTML+=`<tr><td>${i+1}</td><td>${x}</td></tr>`);
+
+ let classe=!Number.isFinite(cv)?"não pode ser interpretado porque a média é zero":cv<15?"indica baixa dispersão":cv<30?"indica dispersão moderada":"indica alta dispersão";
+ document.getElementById("interpretacao").innerHTML=`A amostra possui <b>${dados.length}</b> observações. A média é <b>${m.toFixed(2)}</b>, a mediana é <b>${med.toFixed(2)}</b> e o desvio-padrão amostral é <b>${dp.toFixed(2)}</b>. O coeficiente de variação é <b>${Number.isFinite(cv)?cv.toFixed(2)+"%":"indefinido"}</b> e ${classe}.`;
+ grafico(dados);
+}
+analisar();
+</script>
+</body>
+</html>
